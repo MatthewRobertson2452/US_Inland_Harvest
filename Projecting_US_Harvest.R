@@ -1,5 +1,10 @@
 
+load("Data/all_states_nhd_for_modeling.RData")
+
 load("Model_output.RData")
+
+#US National survey claims there were 35.1 million freshwater anglers in 2022
+fishers<-35000000
 
 # Extrapolate for all waterbodies -----------------------------------
 

@@ -1,16 +1,10 @@
 
-
 library(TMB)
 library(ggplot2)
 
 # LoadData
-load("Data/all_states_nhd_for_modeling.RData")
+
 load("Data/Model_dat.Rdata")
-
-full_nhd<-new_nhd
-
-#US National survey claims there were 35.1 million freshwater anglers in 2022
-fishers<-35000000
 
 # Run the model -----------------------------------------------------------
 
@@ -177,4 +171,4 @@ ggarrange(p1,ggarrange(p2, p3, ncol = 2, labels=c("B","C")),
 ) 
 dev.off()
 
-save.image("Model_output.RData")
+save(rep, file="Model_output.RData")
