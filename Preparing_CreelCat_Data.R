@@ -36,7 +36,7 @@ surv_s<-subset(surv_s, Focal_Species==""|Focal_Species=="All"|Focal_Species=="AL
 
 surv_s<-subset(surv_s, Survey_Type=="Angler Intercept"|Survey_Type=="Angler Intercept Survey")
 
-# Make a Great Lakes Survey Identified
+# Make a Great Lakes Survey Identifier
 surv_s$GL<-0
 
 surv_s[which(grepl("Lake Erie", surv_s$Waterbody_Name)),58]<-1
@@ -169,26 +169,26 @@ grouped_istate<-ifelse(useable_dat$State=="Michigan", 0, grouped_istate)
 grouped_istate<-ifelse(useable_dat$State=="Minnesota", 0, grouped_istate)
 grouped_istate<-ifelse(useable_dat$State=="Wisconsin", 0, grouped_istate)
 grouped_istate<-ifelse(useable_dat$State=="Illinois", 0, grouped_istate)
-#iowa and kentucky together
+#NE
 grouped_istate<-ifelse(useable_dat$State=="Vermont", 1, grouped_istate)
 grouped_istate<-ifelse(useable_dat$State=="Connecticut", 1, grouped_istate)
 grouped_istate<-ifelse(useable_dat$State=="Massachusetts", 1, grouped_istate)
-#vermont alone
+#NGP
 grouped_istate<-ifelse(useable_dat$State=="North Dakota", 2, grouped_istate)
 grouped_istate<-ifelse(useable_dat$State=="South Dakota", 2, grouped_istate)
 grouped_istate<-ifelse(useable_dat$State=="Nebraska", 2, grouped_istate)
 grouped_istate<-ifelse(useable_dat$State=="Wyoming", 2, grouped_istate)
 grouped_istate<-ifelse(useable_dat$State=="Montana", 2, grouped_istate)
-#nd and sd together
+#SE
 grouped_istate<-ifelse(useable_dat$State=="Arkansas", 3, grouped_istate)
 grouped_istate<-ifelse(useable_dat$State=="Florida", 3, grouped_istate)
 grouped_istate<-ifelse(useable_dat$State=="Kentucky", 3, grouped_istate)
 grouped_istate<-ifelse(useable_dat$State=="Tennessee", 3, grouped_istate)
 grouped_istate<-ifelse(useable_dat$State=="South Carolina", 3, grouped_istate)
-#fl, tn, tx, and sc together
+#SW
 grouped_istate<-ifelse(useable_dat$State=="Utah", 4, grouped_istate)
 grouped_istate<-ifelse(useable_dat$State=="Arizona", 4, grouped_istate)
-
+#SGP
 grouped_istate<-ifelse(useable_dat$State=="Texas", 5, grouped_istate)
 grouped_istate<-ifelse(useable_dat$State=="Kansas", 5, grouped_istate)
 

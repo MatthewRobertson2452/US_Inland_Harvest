@@ -27,7 +27,7 @@ model_run<-list(
   int_switch = 0, #0 means no int, #1 means int
   ####ONLY USED FOR RE MODEL
   effort_switch=1, #0 is no random ints, 1 is random ints
-  catch_switch=5 #0 is random slope, 1 is random ints and slopes, 2 is random ints, 3 is no int random slopes, 4 is no int fixed slope
+  catch_switch=5 #switch for random effect formulation in the catch model
 )
 
 if(model_run$n_covars==0){
@@ -47,6 +47,7 @@ tmb.data<-list(
   iGL = useable_dat$GL
 )
 
+#Automation code to set-up data/parameters appropropriately depending on desired model structure
 # Effort int 
 if(tmb.data$effort_switch==0){ tau_int=1} 
 if(tmb.data$effort_switch==1){ tau_int = rep(1, length(unique(useable_dat$istate)))}
@@ -60,13 +61,13 @@ if(tmb.data$catch_switch==0){q_dev = 0.1}
 if(tmb.data$catch_switch==0){slope=rep(1,  length(unique(useable_dat$istate)))} 
 if(tmb.data$catch_switch>0){slope = 1}
 
-
+# Number of covariates
 if(tmb.data$n_covars==0){tau=rep(1,1)}
 if(tmb.data$n_covars==1){tau=rep(1,2)}
 if(tmb.data$n_covars==2){tau=rep(1,3)}
 if(tmb.data$n_covars==3){tau=rep(1,4)}
 
-
+#parameter definitions
 parameters<-list(
   slope=slope,
   q_dev = q_dev,
@@ -76,33 +77,37 @@ parameters<-list(
   log_sd = rep(log(2),2)
 )
 
-
+#naming the random effects
 rname_temp = na.omit(c(ifelse(tmb.data$catch_switch==0,  "slope" ,NA),
                        ifelse(tmb.data$catch_switch<3,  "q_dev" ,NA),
                        ifelse(tmb.data$effort_switch==1,  "tau_int" ,NA)))
 rname<-NULL
 if(length(rname_temp)!=0)rname<-rname_temp
 
+#mapping out parameters depending on model formulation
 map<-list(
   tau_season = factor(rep(NA,length(unique(useable_dat$iseason)))),
   tau=factor(c("1",NA))
 )
 
-
+# load cpp template
 dyn.unload("CreelCatch")
 compile("CreelCatch.cpp")
 dyn.load("CreelCatch")
 
+#define data and parameters within the template
 obj <- MakeADFun(tmb.data,parameters,map=map,random=rname,
                  DLL="CreelCatch",inner.control=list(maxit=500,trace=F))
 
-
+#run the model
 opt<-nlminb(obj$par,obj$fn,obj$gr,
             control = list(trace=10,eval.max=2000,iter.max=1000))
 
+#get model output
 rep = obj$report()
 sdrep<-sdreport(obj)
 
+#check parameter estimates and CIs
 sdrep$value+qnorm(0.975)*sdrep$sd
 sdrep$value-qnorm(0.975)*sdrep$sd
 
