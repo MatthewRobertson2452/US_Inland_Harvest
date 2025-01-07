@@ -43,7 +43,7 @@ tmb.data<-list(
   effort_switch=model_run$effort_switch, 
   catch_switch=model_run$catch_switch, 
   n_covars=model_run$n_covars,
-  season = useable_dat$istate,
+  region = useable_dat$istate,
   iGL = useable_dat$GL
 )
 
@@ -72,7 +72,6 @@ parameters<-list(
   slope=slope,
   q_dev = q_dev,
   tau_int = tau_int,
-  tau_season = rep(0,length(unique(useable_dat$iseason))),
   tau = tau,
   log_sd = rep(log(2),2)
 )
@@ -86,13 +85,12 @@ if(length(rname_temp)!=0)rname<-rname_temp
 
 #mapping out parameters depending on model formulation
 map<-list(
-  tau_season = factor(rep(NA,length(unique(useable_dat$iseason)))),
   tau=factor(c("1",NA))
 )
 
 # load cpp template
 dyn.unload("CreelCatch")
-compile("CreelCatch.cpp")
+TMB::compile("CreelCatch.cpp")
 dyn.load("CreelCatch")
 
 #define data and parameters within the template
@@ -159,11 +157,11 @@ high_conf<-sdrep$value[ind] + qnorm(0.975)*sdrep$sd[ind]
 low_conf<-sdrep$value[ind] - qnorm(0.975)*sdrep$sd[ind]
 est<-sdrep$value[ind]
 
-int_df<-data.frame(est, low_conf, high_conf, seasons=c("Midwest","Northeast","Northern Great Plains","Southeast","Southwest","Southern Great Plains","Northwest"))
+int_df<-data.frame(est, low_conf, high_conf, regions=c("Midwest","Northeast","Northern Great Plains","Southeast","Southwest","Southern Great Plains","Northwest"))
 
-p3<-ggplot(int_df, aes(x=reorder(seasons,est), y=est))+
+p3<-ggplot(int_df, aes(x=reorder(regions,est), y=est))+
   geom_point(size=4)+
-  geom_segment(aes(x=seasons,xend=seasons,y=low_conf,yend=high_conf), data=int_df)+
+  geom_segment(aes(x=regions,xend=regions,y=low_conf,yend=high_conf), data=int_df)+
   theme_bw()+xlab("Region")+ylab("Regional Effect")+
   theme(axis.text= element_text(size=14),axis.title=element_text(size=16,face="bold"))+
   theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1))
