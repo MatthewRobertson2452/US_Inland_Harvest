@@ -6,7 +6,8 @@ Matthew Robertson
 # Citation
 
 Robertson, M.D. 2025. Inland recreational fisheries harvest far exceeds
-reported inland harvest in the United States: code release, doi: TBD.
+reported inland harvest in the United States: code release, doi:
+10.5281/zenodo.14781047.
 
 # Contact
 
