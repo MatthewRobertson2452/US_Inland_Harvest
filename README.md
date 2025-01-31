@@ -33,16 +33,23 @@ analyses in the paper.
     database](https://rconnect.usgs.gov/CreelCat/) and then prepare them
     following methods described in detail from [Robertson et
     al. (2024)](https://doi.org/10.1111/fme.12650) to be used in the
-    CreelCatch model.
+    CreelCatch model. If you don’t want to run the script and just want
+    to access the final output of the script, you can simply open
+    `Data\Model_dat.RData`.
 
 2.  The second script to run is `Downloading_NHD_Data`. This script will
     load NHD data from every state and format it to be used for
-    projections in a later script.
+    projections in a later script. This loading process is very slow and
+    unless you plan to modify something about what is loaded, you can
+    just open the saved output saved as
+    `Data\all_states_nhd_for_modeling.RData`.
 
 3.  The third script to run is `Running_CreelCatch_Model`. This script
     will use the CreelCat data within the `CreelCatch` model to estimate
     parameters relating fishing effort and catch, which will be used to
-    project national harvest.
+    project national harvest.If you don’t want to run the script and
+    just want to access the final output of the script, you can simply
+    open `Model_output.RData`.
 
 4.  Finally, the last script is `Projecting_US_Harvest`. This script
     will use model outputs and the NHD data to project effort, catch,
