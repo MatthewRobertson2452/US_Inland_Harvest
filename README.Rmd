@@ -1,7 +1,7 @@
 ---
 title: "US Inland Harvest"
 author: "Matthew Robertson"
-date: "2024-09-16"
+date: "`r Sys.Date()`"
 output: github_document
 ---
 
