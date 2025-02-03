@@ -1,11 +1,14 @@
 
+# R version 4.4.2
+# nhdR version 0.6.1
+
 library(nhdR)
 
 # These datasets can take up a lot of memory
 # In practice, this data extraction was done in smaller steps to avoid crashing R
 # However, the code is presented here to complete extraction in one step for simplicity
 
-#NORTHEAST
+# Northeast
 
 nh_nhd<-nhd_load(c("NH"),c("NHDWaterbody"))
 nh_nhd_sub<-data.frame(perm_id =nh_nhd$permanent_identifier, area=nh_nhd$areasqkm, fcode=nh_nhd$fcode)
@@ -43,7 +46,7 @@ md_nhd_sub<-data.frame(perm_id =md_nhd$permanent_identifier, area=md_nhd$areasqk
 de_nhd<-nhd_load(c("DE"),c("NHDWaterbody"))
 de_nhd_sub<-data.frame(perm_id =de_nhd$permanent_identifier, area=de_nhd$areasqkm, fcode=de_nhd$fcode)
 
-#midwest
+# Midwest
 
 mi_nhd<-nhd_load(c("MI"),c("NHDWaterbody"))
 mi_nhd_sub<-data.frame(perm_id =mi_nhd$permanent_identifier, area=mi_nhd$areasqkm, fcode=mi_nhd$fcode)
@@ -69,7 +72,7 @@ ia_nhd_sub<-data.frame(perm_id =ia_nhd$permanent_identifier, area=ia_nhd$areasqk
 mo_nhd<-nhd_load(c("MO"),c("NHDWaterbody"))
 mo_nhd_sub<-data.frame(perm_id =mo_nhd$permanent_identifier, area=mo_nhd$areasqkm, fcode=mo_nhd$fcode)
 
-#northern great plains
+# Northern Great Plains
 
 mt_nhd<-nhd_load(c("MT"),c("NHDWaterbody"))
 mt_nhd_sub<-data.frame(perm_id =mt_nhd$permanent_identifier, area=mt_nhd$areasqkm, fcode=mt_nhd$fcode)
@@ -86,7 +89,7 @@ wy_nhd_sub<-data.frame(perm_id =wy_nhd$permanent_identifier, area=wy_nhd$areasqk
 ne_nhd<-nhd_load(c("NE"),c("NHDWaterbody"))
 ne_nhd_sub<-data.frame(perm_id =ne_nhd$permanent_identifier, area=ne_nhd$areasqkm, fcode=ne_nhd$fcode)
 
-#southern great plains
+# Southern Great Plains
 
 ok_nhd<-nhd_load(c("OK"),c("NHDWaterbody"))
 ok_nhd_sub<-data.frame(perm_id =ok_nhd$permanent_identifier, area=ok_nhd$areasqkm, fcode=ok_nhd$fcode)
@@ -97,7 +100,7 @@ tx_nhd_sub<-data.frame(perm_id =tx_nhd$permanent_identifier, area=tx_nhd$areasqk
 ks_nhd<-nhd_load(c("KS"),c("NHDWaterbody"))
 ks_nhd_sub<-data.frame(perm_id =ks_nhd$permanent_identifier, area=ks_nhd$areasqkm, fcode=ks_nhd$fcode)
 
-#southeast
+# Southeast
 
 nc_nhd<-nhd_load(c("NC"),c("NHDWaterbody"))
 nc_nhd_sub<-data.frame(perm_id =nc_nhd$permanent_identifier, area=nc_nhd$areasqkm, fcode=nc_nhd$fcode)
@@ -132,7 +135,7 @@ tn_nhd_sub<-data.frame(perm_id =tn_nhd$permanent_identifier, area=tn_nhd$areasqk
 sc_nhd<-nhd_load(c("SC"),c("NHDWaterbody"))
 sc_nhd_sub<-data.frame(perm_id =sc_nhd$permanent_identifier, area=sc_nhd$areasqkm, fcode=sc_nhd$fcode)
 
-#southwest
+# Southwest
 
 ca_nhd<-nhd_load(c("CA"),c("NHDWaterbody"))
 ca_nhd_sub<-data.frame(perm_id =ca_nhd$permanent_identifier, area=ca_nhd$areasqkm, fcode=ca_nhd$fcode)
@@ -152,7 +155,7 @@ co_nhd_sub<-data.frame(perm_id =co_nhd$permanent_identifier, area=co_nhd$areasqk
 ut_nhd<-nhd_load(c("UT"),c("NHDWaterbody"))
 ut_nhd_sub<-data.frame(perm_id =ut_nhd$permanent_identifier, area=ut_nhd$areasqkm, fcode=ut_nhd$fcode)
 
-#northwest
+# Northwest
 
 wa_nhd<-nhd_load(c("WA"),c("NHDWaterbody"))
 wa_nhd_sub<-data.frame(perm_id =wa_nhd$permanent_identifier, area=wa_nhd$areasqkm, fcode=wa_nhd$fcode)
@@ -165,66 +168,66 @@ id_nhd_sub<-data.frame(perm_id =id_nhd$permanent_identifier, area=id_nhd$areasqk
 
 
 full_nhd<-list(
-  #midwest
-  mi_nhd = mi_nhd_sub, #michigan
-  mn_nhd = mn_nhd_sub, #minnesota
-  wisc_nhd = wisc_nhd_sub, #wisconsin
-  oh_nhd = oh_nhd_sub, # ohio
-  in_nhd = in_nhd_sub, #indiana
-  il_nhd = il_nhd_sub, #illinois
-  ia_nhd = ia_nhd_sub, #iowa
-  mo_nhd = mo_nhd_sub, #missouri
-  #northeast
-  ct_nhd = cn_nhd_sub, #connecticut
-  ma_nhd = ma_nhd_sub, #massachussettes
-  vt_nhd = vt_nhd, #vermont
-  nh_nhd = nh_nhd_sub, #new hampshire
-  me_nhd = me_nhd_sub, #maine
-  ny_nhd = ny_nhd_sub, #new york
-  pa_nhd = pa_nhd_sub, #pennsylvania 
-  ri_nhd = ri_nhd_sub, #rhode island
-  nj_nhd = nj_nhd_sub, #new jersey
-  wv_nhd = wv_nhd_sub, #west virginia
-  md_nhd = md_nhd_sub, #maryland
-  de_nhd = de_nhd_sub, #delaware
-  #northern great plains
-  ne_nhd = ne_nhd_sub, #nebraska
-  nd_nhd = nd_nhd, #north dakota
-  sd_nhd = sd_nhd, #south dakota
-  wy_nhd = wy_nhd, #wyoming
-  mt_nhd = mt_nhd_sub, #montana
-  #southeast
-  ar_nhd = ar_nhd, #arkansas
-  fl_nhd = fl_nhd_sub, #florida
-  ky_nhd = ky_nhd, #kentucky
-  tn_nhd = tn_nhd, #tennessee
-  sc_nhd = sc_nhd, #south carolina
-  nc_nhd = nc_nhd_sub, #north carolina
-  va_nhd = va_nhd_sub, #virginia
-  ga_nhd = ga_nhd_sub, #georgia
-  al_nhd = al_nhd_sub, #alabama
-  la_nhd = la_nhd_sub, #louisiana
-  ms_nhd = ms_nhd_sub, #mississippi
-  #southwest
-  ut_nhd = ut_nhd, #utah
-  ca_nhd = ca_nhd_sub, #california
-  nv_nhd = nv_nhd_sub, #nevada
-  az_nhd = az_nhd_sub, #arizona
-  nm_nhd = nm_nhd_sub, #new mexico
-  co_nhd = co_nhd_sub, #colorado
-  #southern great plains
-  tx_nhd = tx_nhd, #texas
-  ks_nhd = ks_nhd, #kansas
-  ok_nhd = ok_nhd_sub, #oklahoma
-  #Northwest
-  wa_nhd = wa_nhd_sub, #washington
-  or_nhd = or_nhd_sub, #oregon
-  id_nhd = id_nhd_sub #idaho
+  # Midwest
+  mi_nhd = mi_nhd_sub, # Michigan
+  mn_nhd = mn_nhd_sub, # Minnesota
+  wisc_nhd = wisc_nhd_sub, # Wisconsin
+  oh_nhd = oh_nhd_sub, # Ohio
+  in_nhd = in_nhd_sub, # Indiana
+  il_nhd = il_nhd_sub, # Illinois
+  ia_nhd = ia_nhd_sub, # Iowa
+  mo_nhd = mo_nhd_sub, # Missouri
+  # Northeast
+  ct_nhd = cn_nhd_sub, # Connecticut
+  ma_nhd = ma_nhd_sub, # Massachussettes
+  vt_nhd = vt_nhd, # Vermont
+  nh_nhd = nh_nhd_sub, # New Hampshire
+  me_nhd = me_nhd_sub, # Maine
+  ny_nhd = ny_nhd_sub, # New york
+  pa_nhd = pa_nhd_sub, # Pennsylvania 
+  ri_nhd = ri_nhd_sub, # Rhode Island
+  nj_nhd = nj_nhd_sub, # New Jersey
+  wv_nhd = wv_nhd_sub, # West Virginia
+  md_nhd = md_nhd_sub, # Maryland
+  de_nhd = de_nhd_sub, # Delaware
+  # Northern Great Plains
+  ne_nhd = ne_nhd_sub, # Nebraska
+  nd_nhd = nd_nhd, # North Dakota
+  sd_nhd = sd_nhd, # South Dakota
+  wy_nhd = wy_nhd, # Wyoming
+  mt_nhd = mt_nhd_sub, # Montana
+  # Southeast
+  ar_nhd = ar_nhd, # Arkansas
+  fl_nhd = fl_nhd_sub, # Florida
+  ky_nhd = ky_nhd, # Kentucky
+  tn_nhd = tn_nhd, # Tennessee
+  sc_nhd = sc_nhd, # South Carolina
+  nc_nhd = nc_nhd_sub, # North Carolina
+  va_nhd = va_nhd_sub, # Virginia
+  ga_nhd = ga_nhd_sub, # Georgia
+  al_nhd = al_nhd_sub, # Alabama
+  la_nhd = la_nhd_sub, # Louisiana
+  ms_nhd = ms_nhd_sub, # Mississippi
+  # Southwest
+  ut_nhd = ut_nhd, # Utah
+  ca_nhd = ca_nhd_sub, # California
+  nv_nhd = nv_nhd_sub, # Nevada
+  az_nhd = az_nhd_sub, # Arizona
+  nm_nhd = nm_nhd_sub, # New Mexico
+  co_nhd = co_nhd_sub, # Colorado
+  # Southern Great Plains
+  tx_nhd = tx_nhd, # Texas
+  ks_nhd = ks_nhd, # Kansas
+  ok_nhd = ok_nhd_sub, # Oklahoma
+  # Northwest
+  wa_nhd = wa_nhd_sub, # Washington
+  or_nhd = or_nhd_sub, # Oregon
+  id_nhd = id_nhd_sub # Idaho
 )
 
 
 
-#Midwest
+# Midwest
 full_nhd$mn_nhd$istate<-0
 full_nhd$mn_nhd$state<-"Minnesota"
 
@@ -249,7 +252,7 @@ full_nhd$mo_nhd$state<-"Missouri"
 full_nhd$il_nhd$istate<-0
 full_nhd$il_nhd$state<-"Illinois"
 
-#Northeast
+# Northeast
 full_nhd$ct_nhd$istate<-1
 full_nhd$ct_nhd$state<-"Connecticut"
 
@@ -257,13 +260,13 @@ full_nhd$ma_nhd$istate<-1
 full_nhd$ma_nhd$state<-"Massachusetts"
 
 full_nhd$vt_nhd$istate<-1
-vt_nhd$state<-"Vermont"
+full_nhd$vt_nhd$state<-"Vermont"
 
 full_nhd$nh_nhd$istate<-1
 full_nhd$nh_nhd$state<-"New Hampshire"
 
 full_nhd$me_nhd$istate<-1
-me_nhd$state<-"Maine"
+full_nhd$me_nhd$state<-"Maine"
 
 full_nhd$ny_nhd$istate<-1
 full_nhd$ny_nhd$state<-"New York"
@@ -286,7 +289,7 @@ full_nhd$md_nhd$state<-"Maryland"
 full_nhd$de_nhd$istate<-1
 full_nhd$de_nhd$state<-"Delaware"
 
-#Northern GP
+# Northern Great Plains
 
 full_nhd$ne_nhd$istate<-2
 full_nhd$ne_nhd$state<-"Nebraska"
@@ -303,7 +306,7 @@ full_nhd$wy_nhd$state<-"Wyoming"
 full_nhd$mt_nhd$istate<-2
 full_nhd$mt_nhd$state<-"Montana"
 
-#Southeast
+# Southeast
 
 full_nhd$ar_nhd$istate<-3
 full_nhd$ar_nhd$state<-"Arkansas"
@@ -338,7 +341,7 @@ full_nhd$la_nhd$state<-"Louisiana"
 full_nhd$ms_nhd$istate<-3
 full_nhd$ms_nhd$state<-"Mississippi"
 
-#Southwest
+# Southwest
 
 full_nhd$ut_nhd$istate<-4
 full_nhd$ut_nhd$state<-"Utah"
@@ -359,7 +362,7 @@ full_nhd$co_nhd$istate<-4
 full_nhd$co_nhd$state<-"Colorado"
 
 
-#Southern GP
+# Southern Great Plains
 
 full_nhd$ks_nhd$istate<-5
 full_nhd$ks_nhd$state<-"Kansas"

@@ -1,9 +1,11 @@
 
+# R version 4.4.2
+# lubridate version 1.9.4
+# ggplot2 version 3.5.1
+
 
 library(ggplot2)
 library(lubridate)
-library(TMB)
-
 
 # Load the relevant CreelCat data
 effort<-read.csv("Data/AngEffort_Data.csv")
@@ -19,7 +21,7 @@ names(surv)[names(surv) == 'State_Ab'] <- 'StateAb'
 
 table(surv$StateAb)
 
-#####Limit states to those with enough data
+# Limit states to those with enough data
 surv_s<-subset(surv, StateAb=="AK"|StateAb=="AR"|StateAb=="AZ"|StateAb=="CT"|StateAb=="DE"|StateAb=="FL"|StateAb=="GA"|StateAb=="IA"|
                  StateAb=="ID"|StateAb=="IL"|StateAb=="IN"|StateAb=="KS"|StateAb=="KY"|StateAb=="MA"|StateAb=="ME"|StateAb=="MI"|
                  StateAb=="MN"|StateAb=="MT"|StateAb=="ND"|StateAb=="NE"|StateAb=="NJ"|StateAb=="NM"|StateAb=="NV"|StateAb=="OR"|
@@ -31,7 +33,7 @@ surv_s$StateAb<-as.factor(surv_s$StateAb)
 surv_s$State<-droplevels(surv_s$State)
 surv_s$StateAb<-droplevels(surv_s$StateAb)
 
-#remove species specific surveys
+# Remove species specific surveys
 surv_s<-subset(surv_s, Focal_Species==""|Focal_Species=="All"|Focal_Species=="ALL")
 
 surv_s<-subset(surv_s, Survey_Type=="Angler Intercept"|Survey_Type=="Angler Intercept Survey")
@@ -45,7 +47,7 @@ surv_s[which(grepl("Lake Superior", surv_s$Waterbody_Name)),58]<-1
 surv_s[which(grepl("Lake Huron", surv_s$Waterbody_Name)),58]<-1
 surv_s[which(grepl("Lake Ontario", surv_s$Waterbody_Name)),58]<-1
 
-#remove surveys with no duration data
+# Remove surveys with no duration data
 surv_s<-subset(surv_s, Start_Date!="")
 surv_s<-surv_s[!is.na(surv_s$Duration),]
 
@@ -58,7 +60,7 @@ for(i in 1:length(surv_s$Survey_ID)){
   }
 }
 
-#convert remaining surveys with duration 0 to duration 1
+# Convert remaining surveys with duration 0 to duration 1
 surv_s$Duration<-ifelse(surv_s$Duration==0, 1, surv_s$Duration)
 
 fish$Release<-as.numeric(as.character(fish$Release))
@@ -83,7 +85,7 @@ for(i in 1:length(fish$Survey_ID)){
 
 effort$Effort_Hours<-as.numeric(as.character(effort$Effort_Hours))
 
-#create dataframe with important identifying information and add to all dataframes
+# Create dataframe with important identifying information and add to all dataframes
 map<-data.frame(Survey_ID=surv_s$Survey_ID, State=surv_s$State, Year=surv_s$Year, WaterbodyID = surv_s$WB_ID, GL = surv_s$GL)
 
 fish_s<-merge(map, fish, by="Survey_ID")
@@ -138,7 +140,7 @@ agg_catch_nodups$hpd[agg_catch_nodups$hpd<=0] <- NA
 agg_catch_nodups<-agg_catch_nodups[!is.infinite(agg_catch_nodups$cpd),]
 
 
-####CUT OUT DUPLICATES
+# Cut out duplicates 
 n_survs_tab<-as.data.frame(table(agg_catch_nodups$WaterbodyID))
 few_survs<-subset(n_survs_tab, Freq<5)
 
@@ -159,43 +161,43 @@ remove_recents<-subset(new_agg_catch_nodups, Year>1999)
 # Only keep rows that have necessary data 
 useable_dat<-subset(remove_recents, is.na(cpd)==FALSE & is.na(epd)==FALSE)
 
-#create region identifier for the CreelCatch model
+# Create region identifier for the CreelCatch model
 istate<-as.numeric(droplevels(useable_dat$State))-1
 
 grouped_istate<-6
-#MW
+# Midwest
 grouped_istate<-ifelse(useable_dat$State=="Iowa", 0, grouped_istate)
 grouped_istate<-ifelse(useable_dat$State=="Michigan", 0, grouped_istate)
 grouped_istate<-ifelse(useable_dat$State=="Minnesota", 0, grouped_istate)
 grouped_istate<-ifelse(useable_dat$State=="Wisconsin", 0, grouped_istate)
 grouped_istate<-ifelse(useable_dat$State=="Illinois", 0, grouped_istate)
-#NE
+# Northeast
 grouped_istate<-ifelse(useable_dat$State=="Vermont", 1, grouped_istate)
 grouped_istate<-ifelse(useable_dat$State=="Connecticut", 1, grouped_istate)
 grouped_istate<-ifelse(useable_dat$State=="Massachusetts", 1, grouped_istate)
-#NGP
+# Northern Great Plains
 grouped_istate<-ifelse(useable_dat$State=="North Dakota", 2, grouped_istate)
 grouped_istate<-ifelse(useable_dat$State=="South Dakota", 2, grouped_istate)
 grouped_istate<-ifelse(useable_dat$State=="Nebraska", 2, grouped_istate)
 grouped_istate<-ifelse(useable_dat$State=="Wyoming", 2, grouped_istate)
 grouped_istate<-ifelse(useable_dat$State=="Montana", 2, grouped_istate)
-#SE
+# Southeast
 grouped_istate<-ifelse(useable_dat$State=="Arkansas", 3, grouped_istate)
 grouped_istate<-ifelse(useable_dat$State=="Florida", 3, grouped_istate)
 grouped_istate<-ifelse(useable_dat$State=="Kentucky", 3, grouped_istate)
 grouped_istate<-ifelse(useable_dat$State=="Tennessee", 3, grouped_istate)
 grouped_istate<-ifelse(useable_dat$State=="South Carolina", 3, grouped_istate)
-#SW
+# Southwest
 grouped_istate<-ifelse(useable_dat$State=="Utah", 4, grouped_istate)
 grouped_istate<-ifelse(useable_dat$State=="Arizona", 4, grouped_istate)
-#SGP
+# Southern Great Plains
 grouped_istate<-ifelse(useable_dat$State=="Texas", 5, grouped_istate)
 grouped_istate<-ifelse(useable_dat$State=="Kansas", 5, grouped_istate)
 
 
 useable_dat$istate<-grouped_istate
 
-#convert area from hectares to sqkm
+# Convert area from hectares to sqkm
 useable_dat$Area<-useable_dat$Area*0.00404686
 
 save(data=useable_dat, file="Model_dat.RData")

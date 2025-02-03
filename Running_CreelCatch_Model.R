@@ -1,33 +1,39 @@
 
+# R version 4.4.2
+# TMB version 1.9.16
+# ggplot2 version 3.5.1
+# ggpubr version 0.6.0
+
 library(TMB)
 library(ggplot2)
+library(ggpubr)
 
-# LoadData
+# Load Data
 
 load("Data/Model_dat.Rdata")
 
 # Run the model -----------------------------------------------------------
 
-#remove data without waterbody area
+# Remove data without waterbody area
 useable_dat<-subset(useable_dat, is.na(Area)==FALSE)
 
-#remove great lakes data
+# Remove great lakes data
 useable_dat<-subset(useable_dat, GL==0)
 
-# one waterbody in minnesota that was lake superior but was spelled incorrectly so did not get captured by GL map
+# One waterbody in Minnesota that was Lake Superior but was spelled incorrectly so did not get captured by Great Lakes map
 useable_dat<-subset(useable_dat, WaterbodyID!="MN_1198")
 
 model_run<-list(
-  data_type = "2000", #give info on any data subsets for Rdata naming
-  n_covars=1, # 0 is no covars, 1 is one covar, 2 is 2 covars
+  data_type = "2000", # Give info on any data subsets for Rdata naming
+  n_covars=1, # 0 is no covariates, 1 is one covariates, 2 is 2 covariates
   first_covar=log(useable_dat$Area),
   second_covar=useable_dat$Area,
   third_covar=useable_dat$Area,
-  ####ONLY USED FOR BASIC MODEL
-  int_switch = 0, #0 means no int, #1 means int
-  ####ONLY USED FOR RE MODEL
-  effort_switch=1, #0 is no random ints, 1 is random ints
-  catch_switch=5 #switch for random effect formulation in the catch model
+  #### ONLY USED FOR BASIC MODEL
+  int_switch = 0, # 0 Means no intercept, #1 means intercept
+  ### ONLY USED FOR RE MODEL
+  effort_switch=1, # 0 is no random intercepts, 1 is random intercepts
+  catch_switch=5 # Switch for random effect formulation in the catch model
 )
 
 if(model_run$n_covars==0){
@@ -47,8 +53,8 @@ tmb.data<-list(
   iGL = useable_dat$GL
 )
 
-#Automation code to set-up data/parameters appropropriately depending on desired model structure
-# Effort int 
+# Automation code to set-up data/parameters appropriately depending on desired model structure
+# Effort intercept 
 if(tmb.data$effort_switch==0){ tau_int=1} 
 if(tmb.data$effort_switch==1){ tau_int = rep(1, length(unique(useable_dat$istate)))}
 
@@ -67,7 +73,7 @@ if(tmb.data$n_covars==1){tau=rep(1,2)}
 if(tmb.data$n_covars==2){tau=rep(1,3)}
 if(tmb.data$n_covars==3){tau=rep(1,4)}
 
-#parameter definitions
+# Parameter definitions
 parameters<-list(
   slope=slope,
   q_dev = q_dev,
@@ -76,36 +82,36 @@ parameters<-list(
   log_sd = rep(log(2),2)
 )
 
-#naming the random effects
+# Naming the random effects
 rname_temp = na.omit(c(ifelse(tmb.data$catch_switch==0,  "slope" ,NA),
                        ifelse(tmb.data$catch_switch<3,  "q_dev" ,NA),
                        ifelse(tmb.data$effort_switch==1,  "tau_int" ,NA)))
 rname<-NULL
 if(length(rname_temp)!=0)rname<-rname_temp
 
-#mapping out parameters depending on model formulation
+# Mapping out parameters depending on model formulation
 map<-list(
   tau=factor(c("1",NA))
 )
 
-# load cpp template
+# Load cpp template
 dyn.unload("CreelCatch")
 TMB::compile("CreelCatch.cpp")
 dyn.load("CreelCatch")
 
-#define data and parameters within the template
+# Define data and parameters within the template
 obj <- MakeADFun(tmb.data,parameters,map=map,random=rname,
                  DLL="CreelCatch",inner.control=list(maxit=500,trace=F))
 
-#run the model
+# Run the model
 opt<-nlminb(obj$par,obj$fn,obj$gr,
             control = list(trace=10,eval.max=2000,iter.max=1000))
 
-#get model output
+# Get model output
 rep = obj$report()
 sdrep<-sdreport(obj)
 
-#check parameter estimates and CIs
+# Check parameter estimates and CIs
 sdrep$value+qnorm(0.975)*sdrep$sd
 sdrep$value-qnorm(0.975)*sdrep$sd
 
@@ -165,8 +171,6 @@ p3<-ggplot(int_df, aes(x=reorder(regions,est), y=est))+
   theme_bw()+xlab("Region")+ylab("Regional Effect")+
   theme(axis.text= element_text(size=14),axis.title=element_text(size=16,face="bold"))+
   theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1))
-
-library(ggpubr)
 
 jpeg("general_model_output.jpeg", width=8,height=10, units="in", res=400)
 ggarrange(p1,ggarrange(p2, p3, ncol = 2, labels=c("B","C")),

@@ -1,9 +1,11 @@
 
+# R version 4.4.2
+
 load("Data/all_states_nhd_for_modeling.RData")
 
 load("Model_output.RData")
 
-#US National survey claims there were 35.1 million freshwater anglers in 2022
+# US National survey claims there were 35.1 million freshwater anglers in 2022
 fishers<-35000000
 
 # Extrapolate for all waterbodies -----------------------------------
@@ -22,15 +24,15 @@ wisc_C<-rep$log_q + rep$slope*wisc_E
 all_total_c<-sum(exp(wisc_C))*365
 all_c_per_fisher<-(sum(exp(wisc_C))*365)/(fishers)
 
-#Assuming every waterbody is fished gives us 58 billion fish caught annually
+# Assuming every waterbody is fished gives us 58 billion fish caught annually
 all_total_c/1000000000
 
-#Assuming every waterbody is fished tells us that each fisher catches 1700 fish a year
+# Assuming every waterbody is fished tells us that each fisher catches 1700 fish a year
 all_c_per_fisher
 
 # Extrapolate based on areas > 0.16 km2 -----------------------------------
 
-#min based on 5% wb quantile
+# Minimum based on 5% waterbody quantile
 sub_all_nhd<-subset(full_nhd, (fcode==39004|fcode==39009|fcode==39010|fcode==39011|fcode==39012|fcode==43600) & area>0.16)
 
 prop_lakes<-c(1,2,3,4,5,10,20)
@@ -84,13 +86,13 @@ e_per_fisher_df<-data.frame(catch=c(e_per_fisher), lake_sub=factor(rep(colnames(
 level_order=c("100%","50%","33%","25%","20%","10%","5%")
 
 
-# Extrapolate based on creel cdf ------------------------------------------
+# Extrapolate based on creel cumulative frequency distribution (CDF) ------------------------------------------
 
 break_pts<-seq(0,50,by=0.5)
-# transforming the data
+# Transforming the data
 data_transform = cut(useable_dat$Area, break_pts,
                      right=FALSE)
-# creating the frequency table
+# Creating the frequency table
 freq_table = table(data_transform)
 
 cumulative_freq = c(0, cumsum(freq_table))/max(cumsum(freq_table))
@@ -144,7 +146,7 @@ plot(break_pts, cumulative_freq,
 
 data_transform = cut(df1$area, break_pts,
                      right=FALSE)
-# creating the frequency table
+# Creating the frequency table
 freq_table = table(data_transform)
 
 cumulative_freq_nhd = c(0, cumsum(freq_table))/max(cumsum(freq_table))
@@ -240,8 +242,8 @@ dev.off()
 
 # Convert extrapolated catch numbers to weights ---------------------------
 
-#Using estimates from fishbase for Fusiform bodyshapes (Froese & Thorson 2014), 
-#l-w parameters would be a=0.0112, b=3.04
+# Using estimates from fishbase for Fusiform bodyshapes (Froese & Thorson 2014), 
+# l-w parameters would be a=0.0112, b=3.04
 avg_wgt<-c((0.0112*28.8^3.04)/1000)*0.34
 avg_wgt_est<-((total_c_df$catch*1000000000)*avg_wgt)/1000
 

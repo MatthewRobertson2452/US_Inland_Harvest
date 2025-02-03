@@ -6,30 +6,30 @@ template<class Type>
 Type objective_function<Type>::operator() ()
 {
  
- //load data
-  DATA_VECTOR(log_C); //catch
-  DATA_VECTOR(log_E); //effort
-  DATA_VECTOR(first_covar); //covariate
-  DATA_VECTOR(second_covar); //covariate
-  DATA_VECTOR(third_covar); //covariate
-  DATA_SCALAR(effort_switch); //switch to determine effort model structure
-  DATA_SCALAR(catch_switch); //switch to determine catch model structure
-  DATA_SCALAR(n_covars); //scalar to define the number of covariates included
-  DATA_IVECTOR(region); //integer that defines regions
-  DATA_IVECTOR(iGL); //integer to denote great lakes waterbodies
+ // Load data
+  DATA_VECTOR(log_C); // Catch
+  DATA_VECTOR(log_E); // Effort
+  DATA_VECTOR(first_covar); // Covariate
+  DATA_VECTOR(second_covar); // Covariate
+  DATA_VECTOR(third_covar); // Covariate
+  DATA_SCALAR(effort_switch); // Switch to determine effort model structure
+  DATA_SCALAR(catch_switch); // Switch to determine catch model structure
+  DATA_SCALAR(n_covars); // Scalar to define the number of covariates included
+  DATA_IVECTOR(region); // Integer that defines regions
+  DATA_IVECTOR(iGL); // Integer to denote great lakes waterbodies
   
-  //create object that is the length of the catch data
+  // Create object that is the length of the catch data
   int N = log_C.size();
   Type zero = 0.0;
   
-  //define parameters
-  PARAMETER_VECTOR(slope); //effect of effort on catch
-  PARAMETER_VECTOR(q_dev); //catch intercept
-  PARAMETER_VECTOR(tau_int); //effort intercept
-  PARAMETER_VECTOR(tau); //effect of covariates(s) on effort
-  PARAMETER_VECTOR(log_sd); //sd of catch and effort models
+  // Define parameters
+  PARAMETER_VECTOR(slope); // Effect of effort on catch
+  PARAMETER_VECTOR(q_dev); // Catch intercept
+  PARAMETER_VECTOR(tau_int); // Effort intercept
+  PARAMETER_VECTOR(tau); // Effect of covariates(s) on effort
+  PARAMETER_VECTOR(log_sd); // Sd of catch and effort models
   
-  //define other objects used within the code
+  // Define other objects used within the code
   vector<Type> sd = exp(log_sd);
   vector<Type> pred_C(N);
   vector<Type> pred_E(N);
@@ -52,7 +52,7 @@ Type objective_function<Type>::operator() ()
     it = region(n);
     igl = iGL(n);
     
-    //model without regional effects
+    // Model without regional effects
     if(effort_switch==0){
       if(n_covars==0){
         log_pred_E(n) = tau_int(0);
@@ -83,7 +83,7 @@ Type objective_function<Type>::operator() ()
     }
     }
     
-    //model with regional effects
+    // Model with regional effects
     if(effort_switch==1){
       if(n_covars==0){
         log_pred_E(n) = tau_int(it);
@@ -114,7 +114,7 @@ Type objective_function<Type>::operator() ()
       }
     }
     
-    //define effort model residuals
+    // Define effort model residuals
     E_resid(n) = log_E(n) - log_pred_E(n);
     std_resid_E(n) = E_resid(n)/sd(0);
     
@@ -126,18 +126,18 @@ Type objective_function<Type>::operator() ()
     if(catch_switch==4){log_pred_C(n) = log_q(0) + log_pred_E(n);}
     if(catch_switch==5){log_pred_C(n) = log_q(0) + slope(0) * log_pred_E(n);}
 
-    //define catch model residuals
+    // Define catch model residuals
     C_resid(n) = log_C(n) - log_pred_C(n);
     std_resid_C(n) = C_resid(n)/sd(1);
   }
   
-  //catch and effort model likelihood functions
+  // Catch and effort model likelihood functions
   for(int n = 0;n < N;++n){ 
     nll -= dnorm(E_resid(n),zero,sd(0),true);
     nll -= dnorm(C_resid(n),zero,sd(1),true);
   }
   
-  //model reporting
+  // Model reporting
   REPORT(tau_int)
   REPORT(slope);
   REPORT(log_pred_C);
