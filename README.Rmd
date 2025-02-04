@@ -11,7 +11,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 # Citation
 
-Robertson, M.D. 2025. Inland recreational fisheries harvest far exceeds reported inland harvest in the United States: code release, doi: 10.5281/zenodo.14781047.
+Robertson, M.D. 2025. Inland recreational fisheries harvest far exceeds reported inland harvest in the United States: Zenodo code release. https://doi.org/10.5281/zenodo.14781046.
 
 # Contact
 
@@ -20,7 +20,7 @@ Point of Contact - [Abigail J. Lynch](ajlynch@usgs.gov), USGS Climate Adaptation
 
 # Summary
 
-This is the code accompanying Robertson et al. (Submitted) where we estimated that inland recreational fisheries in the US harvest 16 - 43 times more fish than are reported to the FAO.
+This is the code accompanying Robertson et al. (Submitted) where we estimated that inland recreational fisheries in the US harvest 16 - 43 times more fish than are reported to the Food and Agriculture Organization of the United Nations (FAO).
 
 <img src="results_comparison_updated.png"/>
 
@@ -62,7 +62,7 @@ This code is intended to allow readers/reviewers the ability to repeat analyses 
 
 `US_Inland_Harvest.Rproj` - R project file housing the code and data within this repository
 
-`results_comparison_updated.png` - Conceptual diagram comparing recreational inland harvest estimates from multiple sources. Fish represent 10,000 tonnes of harvested fish from inland recreational fisheries. Different colors represent estimates from different references. Each reference builds on the last, where the FAO (2024) estimate only ~10,000 tonnes, Murray et al. (2020) estimate ~40,000 tonnes, and we estimate ~ 320,000 tonnes.
+`results_comparison_updated.png` - Conceptual diagram comparing recreational inland harvest estimates from multiple sources. Fish represent 10,000 tonnes of harvested fish from inland recreational fisheries. Different colors represent estimates from different references. Each reference builds on the last, where the [FAO (2024)](https://doi.org/10.4060/cd0683en) estimate only ~10,000 tonnes, [Murray et al. (2020)](https://doi.org/10.1002/fsh.10483) estimate ~40,000 tonnes, and we estimate ~ 320,000 tonnes.
 
 `Data` - Folder containing data downloaded from the CreelCat database as well as .RData files created using Rscripts in this project
 
@@ -79,7 +79,7 @@ This code is intended to allow readers/reviewers the ability to repeat analyses 
 
 # Disclaimer
 
-Unless otherwise stated, all data, metadata and related materials are considered to satisfy the quality standards relative to the purpose for which the data were collected. Although these data and associated metadata have been reviewed for accuracy and completeness and approved for release by the U.S. Geological Survey (USGS), no warranty expressed or implied is made regarding the display or utility of the data for other purposes, nor on all computer systems, nor shall the act of distribution constitute any such warranty.
+This software has been approved for release by the Climate Adaptation Science Centers. No warranty, expressed or implied, is made as to the functionality of the software and related material nor shall the fact of release constitute any such warranty. Furthermore, the software is released on condition that the Climate Adaptation Science Centers shall not be held liable for any damages resulting from its authorized or unauthorized use.
 
 # Acknowledgements 
 
