@@ -20,7 +20,7 @@ Point of Contact - [Abigail J. Lynch](ajlynch@usgs.gov), USGS Climate Adaptation
 
 # Summary
 
-This is the code accompanying Robertson et al. (Submitted) where we estimated that inland recreational fisheries in the US harvest 16 - 43 times more fish than are reported to the Food and Agriculture Organization of the United Nations (FAO).
+This is the code accompanying Robertson et al. (Submitted) where we estimate that inland recreational fisheries in the US harvest 16 - 43 times more fish than are reported to the Food and Agriculture Organization of the United Nations (FAO).
 
 <img src="results_comparison_updated.png"/>
 
