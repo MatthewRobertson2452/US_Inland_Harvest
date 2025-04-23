@@ -3,6 +3,17 @@
 
 load("Data/all_states_nhd_for_modeling.RData")
 
+load("Data/Model_dat.Rdata")
+
+# Remove data without waterbody area
+useable_dat<-subset(useable_dat, is.na(Area)==FALSE)
+
+# Remove great lakes data
+useable_dat<-subset(useable_dat, GL==0)
+
+# One waterbody in Minnesota that was Lake Superior but was spelled incorrectly so did not get captured by Great Lakes map
+useable_dat<-subset(useable_dat, WaterbodyID!="MN_1198")
+
 load("Model_output.RData")
 
 # US National survey claims there were 35.1 million freshwater anglers in 2022
@@ -10,7 +21,7 @@ fishers<-35000000
 
 # Extrapolate for all waterbodies -----------------------------------
 
-sub_all_nhd<-subset(full_nhd, (fcode==39004|fcode==39009|fcode==39010|fcode==39011|fcode==39012|fcode==43600))
+sub_all_nhd<-subset(new_nhd, (fcode==39004|fcode==39009|fcode==39010|fcode==39011|fcode==39012|fcode==43600))
 
 wisc_E<-rep(NA, length(sub_all_nhd$perm_id))
 for(j in 1:length(sub_all_nhd$perm_id)){
@@ -24,16 +35,16 @@ wisc_C<-rep$log_q + rep$slope*wisc_E
 all_total_c<-sum(exp(wisc_C))*365
 all_c_per_fisher<-(sum(exp(wisc_C))*365)/(fishers)
 
-# Assuming every waterbody is fished gives us 58 billion fish caught annually
+# Assuming every waterbody is fished gives us 61 billion fish caught annually
 all_total_c/1000000000
 
-# Assuming every waterbody is fished tells us that each fisher catches 1700 fish a year
+# Assuming every waterbody is fished tells us that each fisher catches 1750 fish a year
 all_c_per_fisher
 
 # Extrapolate based on areas > 0.16 km2 -----------------------------------
 
 # Minimum based on 5% waterbody quantile
-sub_all_nhd<-subset(full_nhd, (fcode==39004|fcode==39009|fcode==39010|fcode==39011|fcode==39012|fcode==43600) & area>0.16)
+sub_all_nhd<-subset(new_nhd, (fcode==39004|fcode==39009|fcode==39010|fcode==39011|fcode==39012|fcode==43600) & area>0.16)
 
 prop_lakes<-c(1,2,3,4,5,10,20)
 prop_lakes_lab<-c("100%","50%", "33%", "25%", "20%","10%","5%")
@@ -83,7 +94,10 @@ level_order=c("100%","50%","33%","25%","20%","10%","5%")
 
 e_per_fisher_df<-data.frame(catch=c(e_per_fisher), lake_sub=factor(rep(colnames(e_per_fisher),each=length(e_per_fisher[,1]))))
 
-level_order=c("100%","50%","33%","25%","20%","10%","5%")
+
+total_c_df<-data.frame(catch=c(total_c/1000000000), lake_sub=factor(rep(colnames(total_c),each=length(total_c[,1]))))
+
+total_e_df<-data.frame(catch=c(total_e/1000000), lake_sub=factor(rep(colnames(total_e),each=length(total_e[,1]))))
 
 
 # Extrapolate based on creel cumulative frequency distribution (CDF) ------------------------------------------
@@ -105,7 +119,7 @@ cum_freq_df<-data.frame(cum_freq=cumulative_freq, area=break_pts)
 
 
 new_list<-list()
-sub_wisc_nhd<-subset(full_nhd, (fcode==39004|fcode==39009|fcode==39010|fcode==39011|fcode==39012|fcode==43600) & area<7000)
+sub_wisc_nhd<-subset(new_nhd, (fcode==39004|fcode==39009|fcode==39010|fcode==39011|fcode==39012|fcode==43600) & area<7000)
 for(i in 2:length(break_pts)){
   if(i<length(break_pts)){
     sub_nhd<-subset(sub_wisc_nhd, area<=break_pts[i] & area>break_pts[i-1])

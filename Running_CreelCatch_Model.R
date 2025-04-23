@@ -80,7 +80,7 @@ marginal_r2_C<-(fe_var_C)/(fe_var_C+var_resid_C) #marginal r2 from catch model (
 # Check parameter estimates and CIs
 sdrep$value+qnorm(0.975)*sdrep$sd
 sdrep$value-qnorm(0.975)*sdrep$sd
-
+sdrep$value
 
 # Plot catch - effort relationship ----------------------------------------
 
@@ -205,6 +205,18 @@ ggplot(data=effort_resids, aes(x=wb_area, y=std_resids))+
   facet_wrap(~region)
 dev.off()
 
+jpeg("effort_resid_region.jpeg", width=7,height=7, units="in", res=400)
+ggplot(data=effort_resids, aes(x=region, y=std_resids))+
+  geom_jitter(width=0.25, height=0, colour="lightblue")+
+  geom_boxplot(alpha=0.5)+
+  geom_smooth(se=FALSE)+
+  geom_hline(yintercept=0, col="red", linetype="dashed", linewidth=1)+ 
+  theme_bw()+xlab("Region")+ylab("Standardized Effort Residuals")+
+  theme(axis.text= element_text(size=14),axis.title=element_text(size=16,face="bold"))+
+  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1))
+dev.off()
+
+
 jpeg("effort_resid_surv_duration.jpeg", width=6,height=4, units="in", res=400)
 ggplot(data=effort_resids, aes(x=survey_time, y=std_resids))+
   geom_point(colour="black",fill="lightblue")+
@@ -274,6 +286,19 @@ ggplot(data=catch_resids, aes(x=wb_area, y=std_resids))+
   theme(axis.text= element_text(size=14),axis.title=element_text(size=16,face="bold"))+
   facet_wrap(~region)
 dev.off()
+
+jpeg("catch_resid_region.jpeg", width=7,height=7, units="in", res=400)
+ggplot(data=catch_resids, aes(x=region, y=std_resids))+
+  geom_jitter(width=0.25, height=0, colour="lightblue")+
+  geom_boxplot(alpha=0.5)+
+  geom_smooth(se=FALSE)+
+  geom_hline(yintercept=0, col="red", linetype="dashed", linewidth=1)+ 
+  theme_bw()+xlab("Region")+ylab("Standardized Catch Residuals")+
+  theme(axis.text= element_text(size=14),axis.title=element_text(size=16,face="bold"))+
+  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1))
+dev.off()
+
+
 
 jpeg("catch_resid_effort.jpeg", width=6,height=4, units="in", res=400)
 ggplot(data=catch_resids, aes(x=effort_pred, y=std_resids))+
